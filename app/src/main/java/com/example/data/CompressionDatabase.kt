@@ -30,7 +30,7 @@ interface CompressionDao {
 
 @Database(
     entities = [CompressionRecord::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class CompressionDatabase : RoomDatabase() {

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="320dp"
+    android:height="180dp"
+    android:viewportWidth="320"
+    android:viewportHeight="180">
+    <!-- Soft Pastel Gradient Backdrop -->
+    <path android:pathData="M0,0h320v180h-320z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="0"
+                android:startY="0"
+                android:endX="320"
+                android:endY="180"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#D8F3E5" />
+                <item android:offset="0.5" android:color="#D6EAFF" />
+                <item android:offset="1.0" android:color="#EFE3FF" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <!-- Decorative Soft Circles -->
+    <path
+        android:fillColor="#55FFFFFF"
+        android:pathData="M50,40m-36,0a36,36 0,1 1,72 0a36,36 0,1 1,-72 0" />
+    <path
+        android:fillColor="#55FFFFFF"
+        android:pathData="M270,135m-48,0a48,48 0,1 1,96 0a48,48 0,1 1,-96 0" />
+    <!-- Floating Image Card Left -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M36,52h64c6.6,0 12,5.4 12,12v52c0,6.6 -5.4,12 -12,12h-64c-6.6,0 -12,-5.4 -12,-12v-52c0,-6.6 5.4,-12 12,-12z" />
+    <path
+        android:fillColor="#2B6E57"
+        android:pathData="M46,108l14,-18l10,12l14,-18l18,24H46z" />
+    <path
+        android:fillColor="#F4B400"
+        android:pathData="M56,74m-6,0a6,6 0,1 1,12 0a6,6 0,1 1,-12 0" />
+    <!-- Central Compression Prism -->
+    <path
+        android:fillColor="#1E5E4A"
+        android:pathData="M138,40h44c8.8,0 16,7.2 16,16v68c0,8.8 -7.2,16 -16,16h-44c-8.8,0 -16,-7.2 -16,-16v-68c0,-8.8 7.2,-16 16,-16z" />
+    <path
+        android:fillColor="#D8F3E5"
+        android:pathData="M144,82h32v5h-32zM144,93h32v5h-32zM170,66l-10,10l-10,-10h7v-10h6v10zM150,114l10,-10l10,10h-7v10h-6v-10z" />
+    <!-- Floating Dual PDF Card Right -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M220,48h64c6.6,0 12,5.4 12,12v56c0,6.6 -5.4,12 -12,12h-64c-6.6,0 -12,-5.4 -12,-12v-56c0,-6.6 5.4,-12 12,-12z" />
+    <path
+        android:fillColor="#255C85"
+        android:pathData="M232,68h40v6h-40zM232,82h40v6h-40zM232,96h26v6h-26z" />
+    <path
+        android:fillColor="#1B8755"
+        android:pathData="M268,99m-10,0a10,10 0,1 1,20 0a10,10 0,1 1,-20 0" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M267,93h2v12h-2zM262,98h12v2h-12z" />
+</vector>

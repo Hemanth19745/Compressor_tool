@@ -1,0 +1,6 @@
+{
+  "name": "SqueezeStudio",
+  "description": "All-in-one image, document, e-book, archive, and dual-PDF merge compression studio with an interactive Material 3 pastel dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

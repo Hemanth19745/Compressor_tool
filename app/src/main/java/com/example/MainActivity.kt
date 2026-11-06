@@ -351,12 +351,6 @@ fun SqueezeStudioApp(
                                 onPickAnyFile = {
                                     documentPickerLauncher.launch(arrayOf("*/*"))
                                 },
-                                onLoadSample = { cat, ext ->
-                                    viewModel.loadSampleIntoStudio(cat, ext)
-                                },
-                                onLoadTwoSamplePdfs = {
-                                    viewModel.loadTwoSamplePdfsForMerge()
-                                },
                                 modifier = contentModifier
                             )
                         }
@@ -377,12 +371,6 @@ fun SqueezeStudioApp(
                                 onSwapMergePdfs = { viewModel.swapPrimaryAndSecondaryPdfs() },
                                 onClearMergePdfSlot = { slot -> viewModel.clearMergePdfSlot(slot) },
                                 onUpdateMergedFileName = { viewModel.updateMergedPdfFileName(it) },
-                                onLoadSampleFile = { cat, ext ->
-                                    viewModel.loadSampleIntoStudio(cat, ext)
-                                },
-                                onLoadTwoSamplePdfs = {
-                                    viewModel.loadTwoSamplePdfsForMerge()
-                                },
                                 onSelectPreset = { viewModel.applyPreset(it) },
                                 onCompressionPercentChange = { viewModel.updateCompressionPercent(it) },
                                 onResolutionScaleChange = { viewModel.updateResolutionScale(it) },

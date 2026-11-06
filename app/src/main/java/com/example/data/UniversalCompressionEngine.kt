@@ -40,8 +40,7 @@ class UniversalCompressionEngine(private val context: Context) {
      */
     suspend fun inspectFile(
         file: File,
-        displayNameOverride: String? = null,
-        isSample: Boolean = false
+        displayNameOverride: String? = null
     ): SelectedFileInfo = withContext(Dispatchers.IO) {
         val displayName = displayNameOverride ?: file.name
         val ext = displayName.substringAfterLast('.', "BIN").uppercase(Locale.US)
@@ -62,7 +61,6 @@ class UniversalCompressionEngine(private val context: Context) {
                         sizeBytes = sizeBytes,
                         metadataSummary = "SVG Vector XML • ${formatFileSize(sizeBytes)}",
                         previewBitmap = preview,
-                        isSampleFile = isSample,
                         smartRecommendation = smartRec
                     )
                 } else {
@@ -84,7 +82,6 @@ class UniversalCompressionEngine(private val context: Context) {
                         widthPx = w,
                         heightPx = h,
                         previewBitmap = preview,
-                        isSampleFile = isSample,
                         smartRecommendation = smartRec
                     )
                 }
@@ -121,7 +118,6 @@ class UniversalCompressionEngine(private val context: Context) {
                     metadataSummary = "$pages ${if (pages == 1) "page" else "pages"} • PDF Document",
                     pageCount = pages,
                     previewBitmap = firstPageBitmap,
-                    isSampleFile = isSample,
                     smartRecommendation = smartRec
                 )
             }
@@ -136,7 +132,6 @@ class UniversalCompressionEngine(private val context: Context) {
                     sizeBytes = sizeBytes,
                     metadataSummary = entrySummary,
                     previewBitmap = preview,
-                    isSampleFile = isSample,
                     smartRecommendation = smartRec
                 )
             }
@@ -272,15 +267,7 @@ class UniversalCompressionEngine(private val context: Context) {
         }
 
         val srcBitmap = BitmapFactory.decodeFile(srcFile.absolutePath, decodeOptions)
-            ?: SampleFileGenerator(context).createRichSampleBitmap(
-                width = 1000,
-                height = 750,
-                title = source.displayName,
-                subtitle = "Decoded Image Stream",
-                primaryColor = Color.parseColor("#1E5E4A"),
-                secondaryColor = Color.parseColor("#255C85"),
-                accentColor = Color.parseColor("#F4B400")
-            )
+            ?: throw java.io.IOException("Unable to decode image file: ${srcFile.name}")
 
         // Calculate scaled dimensions using both scaleRatio and compressionPercent
         val effectiveScale = (scaleRatio * sqrt((110 - compressionPercent * 0.65f) / 100f)).coerceIn(0.25f, 1.0f)

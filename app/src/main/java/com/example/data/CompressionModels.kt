@@ -202,7 +202,6 @@ data class SelectedFileInfo(
     val widthPx: Int = 0,
     val heightPx: Int = 0,
     val previewBitmap: Bitmap? = null,
-    val isSampleFile: Boolean = false,
     val smartRecommendation: SmartFormatRecommendation? = null
 )
 

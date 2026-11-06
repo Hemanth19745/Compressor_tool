@@ -90,8 +90,6 @@ fun DashboardScreen(
     historyRecords: List<CompressionRecord>,
     onSelectCategory: (ToolCategory, Boolean) -> Unit,
     onPickAnyFile: () -> Unit,
-    onLoadSample: (ToolCategory, String) -> Unit,
-    onLoadTwoSamplePdfs: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val totalSavedBytes = remember(historyRecords) {
@@ -267,125 +265,23 @@ fun DashboardScreen(
                         }
                     }
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                    Button(
+                        onClick = { onSelectCategory(ToolCategory.PDF, true) },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = PastelSkyAccent,
+                            contentColor = Color.White
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag("open_pdf_merger_button")
                     ) {
-                        Button(
-                            onClick = { onSelectCategory(ToolCategory.PDF, true) },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = PastelSkyAccent,
-                                contentColor = Color.White
-                            ),
-                            modifier = Modifier
-                                .weight(1f)
-                                .testTag("open_pdf_merger_button")
-                        ) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.CallMerge,
-                                contentDescription = null,
-                                modifier = Modifier.size(18.dp)
-                            )
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text("Add 2 PDFs Now")
-                        }
-                        OutlinedButton(
-                            onClick = onLoadTwoSamplePdfs,
-                            border = BorderStroke(1.dp, PastelSkyAccent),
-                            colors = ButtonDefaults.outlinedButtonColors(contentColor = PastelSkyAccent),
-                            modifier = Modifier
-                                .weight(1f)
-                                .testTag("try_two_sample_pdfs_button")
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.AutoAwesome,
-                                contentDescription = null,
-                                modifier = Modifier.size(18.dp)
-                            )
-                            Spacer(modifier = Modifier.width(6.dp))
-                            Text("Try 2 Sample PDFs")
-                        }
-                    }
-                }
-            }
-        }
-
-        // 4. Instant Sample Playground (Headline Only)
-        item {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag("sample_playground_card"),
-                shape = RoundedCornerShape(24.dp),
-                colors = CardDefaults.cardColors(containerColor = PastelButterContainer),
-                border = BorderStroke(1.dp, PastelButterBorder)
-            ) {
-                Column(
-                    modifier = Modifier.padding(18.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        Surface(
-                            color = PastelButterAccent,
-                            shape = CircleShape,
-                            modifier = Modifier.size(36.dp)
-                        ) {
-                            Box(contentAlignment = Alignment.Center) {
-                                Icon(
-                                    imageVector = Icons.Default.AutoAwesome,
-                                    contentDescription = "Instant Sample Playground",
-                                    tint = Color.White,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                            }
-                        }
-                        Text(
-                            text = "Instant Multi-Format Sample Playground",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = Color(0xFF432F06),
-                            fontWeight = FontWeight.Bold
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.CallMerge,
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp)
                         )
-                    }
-
-                    FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        val quickSamples = listOf(
-                            Triple("Sample PNG Photo", ToolCategory.IMAGE, "PNG"),
-                            Triple("Sample JPG Photo", ToolCategory.IMAGE, "JPG"),
-                            Triple("Sample WEBP", ToolCategory.IMAGE, "WEBP"),
-                            Triple("Sample SVG Vector", ToolCategory.IMAGE, "SVG"),
-                            Triple("Single 4-Page PDF", ToolCategory.PDF, "PDF"),
-                            Triple("Word DOCX", ToolCategory.OFFICE_EBOOK, "DOCX"),
-                            Triple("Slides PPTX", ToolCategory.OFFICE_EBOOK, "PPTX"),
-                            Triple("Excel XLSX", ToolCategory.OFFICE_EBOOK, "XLSX"),
-                            Triple("OpenDoc ODT", ToolCategory.OFFICE_EBOOK, "ODT"),
-                            Triple("E-Book EPUB", ToolCategory.OFFICE_EBOOK, "EPUB"),
-                            Triple("Archive ZIP", ToolCategory.TEXT_ARCHIVE, "ZIP"),
-                            Triple("Data JSON", ToolCategory.TEXT_ARCHIVE, "JSON")
-                        )
-                        quickSamples.forEach { (label, cat, ext) ->
-                            FilterChip(
-                                selected = false,
-                                onClick = { onLoadSample(cat, ext) },
-                                label = {
-                                    Text(
-                                        text = label,
-                                        style = MaterialTheme.typography.labelMedium,
-                                        fontWeight = FontWeight.SemiBold
-                                    )
-                                },
-                                colors = FilterChipDefaults.filterChipColors(
-                                    containerColor = Color.White.copy(alpha = 0.88f),
-                                    labelColor = Color(0xFF432F06)
-                                ),
-                                modifier = Modifier.testTag("sample_chip_${ext.lowercase()}")
-                            )
-                        }
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text("Add 2 PDFs Now")
                     }
                 }
             }

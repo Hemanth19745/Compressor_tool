@@ -3,11 +3,12 @@ package com.example
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import com.example.data.FormatCatalog
-import com.example.data.SampleFileGenerator
+import com.example.data.QualityPreset
 import com.example.data.ToolCategory
 import com.example.data.UniversalCompressionEngine
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,55 +28,52 @@ class ExampleRobolectricTest {
     }
 
     @Test
-    fun `verify global format catalog and dual pdf merge compression`() = runBlocking {
-        val context = ApplicationProvider.getApplicationContext<Context>()
+    fun `verify global format catalog and category detection`() {
         assertTrue(FormatCatalog.allFormats.size >= 25)
         assertEquals(ToolCategory.IMAGE, FormatCatalog.detectCategory("WEBP"))
         assertEquals(ToolCategory.PDF, FormatCatalog.detectCategory("PDF"))
         assertEquals(ToolCategory.OFFICE_EBOOK, FormatCatalog.detectCategory("DOCX"))
-
-        val generator = SampleFileGenerator(context)
-        val engine = UniversalCompressionEngine(context)
-
-        val (pdf1, pdf2) = generator.generateDualSamplePdfsForMerge()
-        val info1 = engine.inspectFile(pdf1, isSample = true)
-        val info2 = engine.inspectFile(pdf2, isSample = true)
-
-        val mergedResult = engine.mergeAndCompressPdfs(
-            pdfs = listOf(info1, info2),
-            compressionPercent = 60,
-            resolutionScalePercent = 75,
-            customOutputName = "Test_Merged.pdf"
-        )
-        assertTrue(File(mergedResult.record.localCachePath).exists())
-        assertTrue(mergedResult.record.isMergedPdf)
-        assertEquals(2, mergedResult.record.mergedSourceCount)
+        assertEquals(ToolCategory.TEXT_ARCHIVE, FormatCatalog.detectCategory("ZIP"))
     }
 
     @Test
-    fun `verify smart recommendation auto-detection and conversion`() = runBlocking {
-        val context = ApplicationProvider.getApplicationContext<Context>()
+    fun `verify smart recommendation auto-detection`() {
         val pngRec = FormatCatalog.getSmartRecommendation("PNG", 2_000_000L)
         assertEquals("WEBP", pngRec.recommendedFormat)
+        assertEquals(QualityPreset.EXTREME, pngRec.recommendedPreset)
 
         val docxRec = FormatCatalog.getSmartRecommendation("DOCX", 100_000L)
         assertEquals("PDF", docxRec.recommendedFormat)
+        assertEquals(QualityPreset.BALANCED, docxRec.recommendedPreset)
 
-        val generator = SampleFileGenerator(context)
+        val bmpRec = FormatCatalog.getSmartRecommendation("BMP", 500_000L)
+        assertEquals("WEBP", bmpRec.recommendedFormat)
+
+        val conversionTargets = FormatCatalog.getAvailableConversionTargets("PNG")
+        assertTrue(conversionTargets.contains("JPEG"))
+        assertTrue(conversionTargets.contains("WEBP"))
+        assertTrue(conversionTargets.contains("PDF"))
+    }
+
+    @Test
+    fun `verify text file inspection and compression`() = runBlocking {
+        val context = ApplicationProvider.getApplicationContext<Context>()
         val engine = UniversalCompressionEngine(context)
 
-        val sampleImage = generator.generateSampleImage("PNG")
-        val imageInfo = engine.inspectFile(sampleImage, isSample = true)
-        assertEquals("WEBP", imageInfo.smartRecommendation?.recommendedFormat)
+        val testFile = File(context.cacheDir, "sample_document.txt").apply {
+            writeText("SqueezeStudio is a universal compression and conversion utility for Android.")
+        }
+        val fileInfo = engine.inspectFile(testFile)
+        assertNotNull(fileInfo)
+        assertEquals("TXT", fileInfo.extension)
+        assertEquals(ToolCategory.TEXT_ARCHIVE, fileInfo.category)
 
-        // Convert PNG to JPEG
-        val conversionResult = engine.compressSingleFile(
-            source = imageInfo,
+        val result = engine.compressSingleFile(
+            source = fileInfo,
             compressionPercent = 50,
-            resolutionScalePercent = 100,
-            targetOutputFormatOverride = "JPEG"
+            resolutionScalePercent = 100
         )
-        assertEquals("JPEG", conversionResult.record.outputFormat)
-        assertTrue(File(conversionResult.record.localCachePath).exists())
+        assertNotNull(result)
+        assertTrue(File(result.record.localCachePath).exists())
     }
 }

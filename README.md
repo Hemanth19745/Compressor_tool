@@ -17,7 +17,7 @@ An Android utility application built with Kotlin, Jetpack Compose, Material 3, a
 │    │ • Savings Hero   │  │ • % Slider / DPI │  │ • Filter Chips   │    │
 │    │ • Pastel Tools   │  │ • Compress/Convert│ │ • Re-Download    │    │
 │    │ • Format Catalog │  │ • Before/After   │  │ • Share/Delete   │    │
-│    │ • Sample Sandbox │  │ • PDF #1 & PDF #2│  │                  │    │
+│    │ • Format Dialog  │  │ • PDF #1 & PDF #2│  │                  │    │
 │    └────────┬─────────┘  └────────┬─────────┘  └────────┬─────────┘    │
 │             │                     │                     │              │
 │             └─────────────────────┼─────────────────────┘              │
@@ -38,7 +38,7 @@ An Android utility application built with Kotlin, Jetpack Compose, Material 3, a
 │                 ┌───────────────────────────────────┐                  │
 │                 │       CompressionRepository       │                  │
 │                 │ • URI resolution / File cache     │                  │
-│                 │ • Sample dispatching              │                  │
+│                 │ • MediaStore export & sharing     │                  │
 │                 │ • History coordination            │                  │
 │                 └───────┬───────────────────┬───────┘                  │
 │                         │                   │                          │
@@ -72,13 +72,13 @@ An Android utility application built with Kotlin, Jetpack Compose, Material 3, a
                     │ Dashboard Screen │
                     └─────────┬────────┘
                               │
-        ┌─────────────────────┼─────────────────────┐
-        │                     │                     │
-        ▼                     ▼                     ▼
- [ Pick Any File ]    [ Select Tool Card ]   [ Try Built-in Sample ]
-        │             (Image / PDF / Office)        │
-        │                     │                     │
-        └─────────────────────┼─────────────────────┘
+        ┌─────────────────────┴─────────────────────┐
+        │                                           │
+        ▼                                           ▼
+ [ Pick Any File ]                         [ Select Tool Card ]
+        │                                 (Image / PDF / Office)
+        │                                           │
+        └─────────────────────┬─────────────────────┘
                               │
                               ▼
                 ┌───────────────────────────┐
@@ -208,7 +208,7 @@ An Android utility application built with Kotlin, Jetpack Compose, Material 3, a
 
 ### 2. Converting File Formats (e.g., PNG to JPEG, TXT to PDF)
 1. On the **Studio** screen, tap the top mode button: **"Convert Format"**.
-2. Pick any file from your device or test with a built-in sample.
+2. Pick any file from your device (Images, PDFs, Documents, Archives).
 3. The app auto-detects the format and displays all compatible target formats:
    - **Images**: Convert between `PNG`, `JPEG`, `WEBP`, `BMP`, and `PDF`.
    - **Documents**: Convert `TXT`, `MD`, `RTF`, and `DOCX` into multi-page formatted `PDF`.
@@ -238,14 +238,6 @@ An Android utility application built with Kotlin, Jetpack Compose, Material 3, a
 3. Tap **"Download Again"** on any card to export another copy to your device.
 4. Tap **"Share"** to send the file via Gmail, WhatsApp, Drive, or nearby share.
 5. Tap the trash icon to remove a record, or tap **"Clear All"** to clean up cache and history.
-
----
-
-### 5. Testing with Built-In Samples (No Device Files Needed)
-1. On the **Dashboard**, scroll to the **"Instant Multi-Format Sample Playground"**.
-2. Tap any format chip (e.g., *Sample PNG Photo*, *Single 4-Page PDF*, *Word DOCX*, *Archive ZIP*).
-3. Or tap **"Try 2 Sample PDFs"** in the 2-PDF Merge card to immediately test dual-PDF merging.
-4. A high-resolution test file is generated on the fly and opened in the Studio for instant experimentation.
 
 ---
 

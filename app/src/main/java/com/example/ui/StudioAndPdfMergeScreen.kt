@@ -107,8 +107,6 @@ fun StudioAndPdfMergeScreen(
     onSwapMergePdfs: () -> Unit,
     onClearMergePdfSlot: (Int) -> Unit,
     onUpdateMergedFileName: (String) -> Unit,
-    onLoadSampleFile: (ToolCategory, String) -> Unit,
-    onLoadTwoSamplePdfs: () -> Unit,
     onSelectPreset: (QualityPreset) -> Unit,
     onCompressionPercentChange: (Int) -> Unit,
     onResolutionScaleChange: (Int) -> Unit,
@@ -231,8 +229,7 @@ fun StudioAndPdfMergeScreen(
                     onPickSlot = onPickMergePdfSlot,
                     onSwapPdfs = onSwapMergePdfs,
                     onClearSlot = onClearMergePdfSlot,
-                    onUpdateMergedName = onUpdateMergedFileName,
-                    onLoadTwoSamplePdfs = onLoadTwoSamplePdfs
+                    onUpdateMergedName = onUpdateMergedFileName
                 )
             }
         } else {
@@ -240,8 +237,7 @@ fun StudioAndPdfMergeScreen(
                 SingleFileSourceCard(
                     category = uiState.selectedCategory,
                     activeFile = uiState.activeFile,
-                    onPickFile = { onPickSingleFile(uiState.selectedCategory) },
-                    onLoadSample = onLoadSampleFile
+                    onPickFile = { onPickSingleFile(uiState.selectedCategory) }
                 )
             }
         }
@@ -281,8 +277,7 @@ private fun DualPdfMergeSlotsCard(
     onPickSlot: (Int) -> Unit,
     onSwapPdfs: () -> Unit,
     onClearSlot: (Int) -> Unit,
-    onUpdateMergedName: (String) -> Unit,
-    onLoadTwoSamplePdfs: () -> Unit
+    onUpdateMergedName: (String) -> Unit
 ) {
     val mergeState = uiState.dualPdfState
 
@@ -299,47 +294,28 @@ private fun DualPdfMergeSlotsCard(
             verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                Surface(
+                    color = PastelSkyAccent,
+                    shape = RoundedCornerShape(12.dp),
+                    modifier = Modifier.size(40.dp)
                 ) {
-                    Surface(
-                        color = PastelSkyAccent,
-                        shape = RoundedCornerShape(12.dp),
-                        modifier = Modifier.size(40.dp)
-                    ) {
-                        Box(contentAlignment = Alignment.Center) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.CallMerge,
-                                contentDescription = null,
-                                tint = Color.White
-                            )
-                        }
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.CallMerge,
+                            contentDescription = null,
+                            tint = Color.White
+                        )
                     }
-                    Text(
-                        text = "Merge Two PDFs & Compress",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Color(0xFF0A2E46),
-                        fontWeight = FontWeight.Bold
-                    )
                 }
-
-                TextButton(
-                    onClick = onLoadTwoSamplePdfs,
-                    modifier = Modifier.testTag("load_two_sample_pdfs_btn")
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.AutoAwesome,
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text("Load 2 Samples")
-                }
+                Text(
+                    text = "Merge Two PDFs & Compress",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color(0xFF0A2E46),
+                    fontWeight = FontWeight.Bold
+                )
             }
 
             // PDF Slot #1
@@ -536,8 +512,7 @@ private fun PdfMergeSlotItem(
 private fun SingleFileSourceCard(
     category: ToolCategory,
     activeFile: SelectedFileInfo?,
-    onPickFile: () -> Unit,
-    onLoadSample: (ToolCategory, String) -> Unit
+    onPickFile: () -> Unit
 ) {
     val (bgColor, accentColor, borderColor) = when (category) {
         ToolCategory.IMAGE -> Triple(PastelMintContainer, PastelMintAccent, PastelMintBorder)
@@ -665,26 +640,30 @@ private fun SingleFileSourceCard(
                     }
                 }
             } else {
-                FlowRow(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                Surface(
+                    color = Color.White.copy(alpha = 0.7f),
+                    shape = RoundedCornerShape(18.dp),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    val formats = FormatCatalog.byCategory(category)
-                        .filter { it.extension != "2-PDF" }
-                        .take(6)
-                    formats.forEach { fmt ->
-                        OutlinedButton(
-                            onClick = { onLoadSample(category, fmt.extension) },
-                            shape = CircleShape,
-                            contentPadding = PaddingValues(horizontal = 12.dp, vertical = 6.dp),
-                            colors = ButtonDefaults.outlinedButtonColors(
-                                containerColor = Color.White.copy(alpha = 0.85f),
-                                contentColor = accentColor
-                            ),
-                            border = BorderStroke(1.dp, accentColor.copy(alpha = 0.4f))
-                        ) {
-                            Text("Try .${fmt.extension}", style = MaterialTheme.typography.labelMedium)
-                        }
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(24.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.UploadFile,
+                            contentDescription = null,
+                            tint = accentColor,
+                            modifier = Modifier.size(36.dp)
+                        )
+                        Text(
+                            text = "No file selected",
+                            style = MaterialTheme.typography.titleSmall,
+                            color = Color(0xFF141817),
+                            fontWeight = FontWeight.SemiBold
+                        )
                     }
                 }
             }

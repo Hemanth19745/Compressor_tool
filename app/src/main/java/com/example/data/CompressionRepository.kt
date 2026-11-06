@@ -21,8 +21,7 @@ import java.util.Locale
 class CompressionRepository(
     private val context: Context,
     private val dao: CompressionDao,
-    private val engine: UniversalCompressionEngine = UniversalCompressionEngine(context),
-    private val sampleGenerator: SampleFileGenerator = SampleFileGenerator(context)
+    private val engine: UniversalCompressionEngine = UniversalCompressionEngine(context)
 ) {
     val allHistory: Flow<List<CompressionRecord>> = dao.getAllRecords()
 
@@ -39,24 +38,7 @@ class CompressionRepository(
                 input.copyTo(output)
             }
         }
-        engine.inspectFile(localFile, displayNameOverride = resolvedName, isSample = false)
-    }
-
-    suspend fun loadSampleFile(category: ToolCategory, preferredExtension: String? = null): SelectedFileInfo {
-        val file = when (category) {
-            ToolCategory.IMAGE -> sampleGenerator.generateSampleImage(preferredExtension ?: "PNG")
-            ToolCategory.PDF -> sampleGenerator.generateSingleSamplePdf()
-            ToolCategory.OFFICE_EBOOK -> sampleGenerator.generateSampleOfficeOrEbook(preferredExtension ?: "DOCX")
-            ToolCategory.TEXT_ARCHIVE -> sampleGenerator.generateSampleArchiveOrData(preferredExtension ?: "ZIP")
-        }
-        return engine.inspectFile(file, isSample = true)
-    }
-
-    suspend fun loadDualSamplePdfs(): Pair<SelectedFileInfo, SelectedFileInfo> {
-        val (pdf1, pdf2) = sampleGenerator.generateDualSamplePdfsForMerge()
-        val info1 = engine.inspectFile(pdf1, isSample = true)
-        val info2 = engine.inspectFile(pdf2, isSample = true)
-        return Pair(info1, info2)
+        engine.inspectFile(localFile, displayNameOverride = resolvedName)
     }
 
     suspend fun compressSingleFile(

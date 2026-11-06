@@ -23,5 +23,5 @@
     <string name="action_download_file">Download to Device</string>
     <string name="action_share_file">Share File</string>
     <string name="empty_history_title">No Compressed Files Yet</string>
-    <string name="empty_history_subtitle">Pick a photo, PDF, Office file, or try a built-in sample from the Dashboard to start saving space.</string>
+    <string name="empty_history_subtitle">Pick a photo, PDF, or document from your device to start optimizing.</string>
 </resources>

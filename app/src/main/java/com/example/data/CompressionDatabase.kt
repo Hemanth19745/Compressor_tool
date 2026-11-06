@@ -21,6 +21,9 @@ interface CompressionDao {
     @Query("UPDATE compression_history SET downloadedUriString = :downloadedUri WHERE id = :id")
     suspend fun updateDownloadedUri(id: Int, downloadedUri: String)
 
+    @Query("SELECT * FROM compression_history WHERE id = :id LIMIT 1")
+    suspend fun getRecordById(id: Int): CompressionRecord?
+
     @Query("DELETE FROM compression_history WHERE id = :id")
     suspend fun deleteRecordById(id: Int)
 

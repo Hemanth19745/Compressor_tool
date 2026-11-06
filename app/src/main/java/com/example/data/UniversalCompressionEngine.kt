@@ -260,7 +260,18 @@ class UniversalCompressionEngine(private val context: Context) {
             )
         }
 
-        val srcBitmap = BitmapFactory.decodeFile(srcFile.absolutePath)
+        // Decode with bounds check first to prevent OutOfMemory on huge camera photos
+        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeFile(srcFile.absolutePath, bounds)
+        val origW = bounds.outWidth.coerceAtLeast(1)
+        val origH = bounds.outHeight.coerceAtLeast(1)
+
+        val decodeOptions = BitmapFactory.Options().apply {
+            // Downsample if image is extremely large (> 4000px)
+            inSampleSize = calculateInSampleSize(origW, origH, 3840, 3840)
+        }
+
+        val srcBitmap = BitmapFactory.decodeFile(srcFile.absolutePath, decodeOptions)
             ?: SampleFileGenerator(context).createRichSampleBitmap(
                 width = 1000,
                 height = 750,
@@ -277,7 +288,11 @@ class UniversalCompressionEngine(private val context: Context) {
         val targetH = max(120, (srcBitmap.height * effectiveScale).roundToInt())
 
         val scaledBitmap = if (targetW != srcBitmap.width || targetH != srcBitmap.height) {
-            Bitmap.createScaledBitmap(srcBitmap, targetW, targetH, true)
+            val scaled = Bitmap.createScaledBitmap(srcBitmap, targetW, targetH, true)
+            if (scaled != srcBitmap && !srcBitmap.isRecycled) {
+                srcBitmap.recycle()
+            }
+            scaled
         } else {
             srcBitmap
         }

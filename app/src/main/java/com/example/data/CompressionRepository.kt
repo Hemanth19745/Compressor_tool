@@ -170,12 +170,31 @@ class CompressionRepository(
         }
     }
 
-    suspend fun deleteHistoryItem(id: Int) {
-        dao.deleteRecordById(id)
+    suspend fun deleteHistoryItem(id: Int) = withContext(Dispatchers.IO) {
+        runCatching {
+            val record = dao.getRecordById(id)
+            if (record != null) {
+                val file = File(record.localCachePath)
+                if (file.exists()) {
+                    file.delete()
+                }
+            }
+            dao.deleteRecordById(id)
+        }
     }
 
-    suspend fun clearAllHistory() {
-        dao.clearAllRecords()
+    suspend fun clearAllHistory() = withContext(Dispatchers.IO) {
+        runCatching {
+            dao.clearAllRecords()
+            val outputsDir = File(context.filesDir, "compressed_outputs")
+            if (outputsDir.exists()) {
+                outputsDir.listFiles()?.forEach { it.delete() }
+            }
+            val inputsDir = File(context.cacheDir, "picked_inputs")
+            if (inputsDir.exists()) {
+                inputsDir.listFiles()?.forEach { it.delete() }
+            }
+        }
     }
 
     private fun queryDisplayName(uri: Uri): String? {
